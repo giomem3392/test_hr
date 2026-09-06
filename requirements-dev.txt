@@ -1,3 +1,4 @@
 ruff==0.16.6
 mypy==2.3.1
 pydantic>=2.0
+pytest>=8.0

@@ -83,13 +83,20 @@ def read_note(filename: str) -> str:
     return path.read_text(encoding="utf-8")
 
 
+_NOTE_SUFFIXES = {".txt", ".md"}
+
+
 def list_notes() -> str:
-    """List note filenames under $HOME (non-recursive, files only)."""
+    """List note filenames under $HOME (non-recursive, note files only)."""
     root = notes_root()
     if not root.is_dir():
         return "error: notes directory is not available"
 
-    names = sorted(p.name for p in root.iterdir() if p.is_file())
+    names = sorted(
+        p.name
+        for p in root.iterdir()
+        if p.is_file() and p.suffix.lower() in _NOTE_SUFFIXES
+    )
     if not names:
         return "(no notes)"
     return "\n".join(names)

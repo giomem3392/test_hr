@@ -7,22 +7,23 @@
 
 ## Summary
 
-Shipped a MAF + `ResponsesHostServer` notes agent with `$HOME` file tools, root `azure.yaml` (project + `gpt-4.1-mini` + hosted python agent, protocol `2.0.0`, code deploy), GitHub Actions CI (ruff + mypy), README with Mermaid session/notes flow, and this implementation note. No live Azure provision/deploy.
+Shipped a MAF + `ResponsesHostServer` notes agent with `$HOME` file tools, root `azure.yaml` (project + `gpt-4.1-mini` + hosted python agent, protocol `2.0.0`, code deploy), GitHub Actions CI (ruff + mypy + pytest), README with Mermaid session/notes flow, and this implementation note. No live Azure provision/deploy.
 
-## Files delivered (on remote branch)
+## Files delivered
 
-| Path | Role | Remote |
-|------|------|--------|
-| `src/notes-agent/notes.py` | Sanitize + save/read/list under `$HOME` | yes |
-| `src/notes-agent/main.py` | `FoundryChatClient` + `Agent` + `@tool` + `ResponsesHostServer` | yes |
-| `src/notes-agent/requirements.txt` | Runtime pins (incl. hosting prerelease) | yes |
-| `src/notes-agent/.env.example` | Local/env docs | yes |
-| `src/notes-agent/.agentignore` | Exclude local env/caches from agent package | yes |
-| `azure.yaml` | Foundry project + model + hosted agent | yes |
-| `.github/workflows/ci.yml` | ruff lint/format + mypy on PRs | yes (commit `5fe7165`) |
-| `pyproject.toml` / `requirements-dev.txt` | Tooling pins + ruff/mypy config | yes |
-| `README.md` | Usage, contracts, Mermaid | yes |
-| `.grok/.planner/implementation.md` | This file | yes |
+| Path | Role |
+|------|------|
+| `src/notes-agent/notes.py` | Sanitize + save/read/list under `$HOME` |
+| `src/notes-agent/main.py` | `FoundryChatClient` + `Agent` + `@tool` + `ResponsesHostServer` |
+| `src/notes-agent/requirements.txt` | Runtime pins (incl. hosting prerelease) |
+| `src/notes-agent/.env.example` | Local/env docs |
+| `src/notes-agent/.agentignore` | Exclude local env/caches from agent package |
+| `tests/test_notes.py` | Unit tests for note helpers |
+| `azure.yaml` | Foundry project + model + hosted agent |
+| `.github/workflows/ci.yml` | ruff lint/format + mypy + pytest on PRs |
+| `pyproject.toml` / `requirements-dev.txt` | Tooling pins + ruff/mypy config |
+| `README.md` | Usage, contracts, Mermaid |
+| `.grok/.planner/implementation.md` | This file (pipeline-locked path) |
 
 ## Pins used
 
@@ -35,24 +36,25 @@ Shipped a MAF + `ResponsesHostServer` notes agent with `$HOME` file tools, root 
 | `python-dotenv` | `1.2.3` |
 | `ruff` | `0.16.6` |
 | `mypy` | `2.3.1` |
+| `pytest` | `>=8.0` (CI) |
 
 ## Plan checklist
 
 1. Scaffold `src/notes-agent/` — done  
-2. `notes.py` helpers + exact `saved note as {filename}` — done  
+2. `notes.py` helpers + exact `saved note as {filename}` + unit tests — done  
 3. MAF Agent + `@tool` + `ResponsesHostServer` — done  
 4. Root `azure.yaml` — done  
-5. CI ruff + mypy — done  
+5. CI ruff + mypy (+ pytest) — done; workflow on branch, lint job green on earlier head  
 6. README + Mermaid — done  
 7. Branch + PR + implementation.md — PR #1 open
 
 ## Choices / deviations
 
-1. **`implementation.md` path:** Wrote `.grok/.planner/implementation.md` (GioBot/profile) instead of plan’s `.grok/.implementor/`.
-2. **Cloud agent unavailable:** Local clone `/workspace/test_hr` + GitHub MCP for PR/file writes; CI landed after workflow-scoped auth.
+1. **`implementation.md` path:** Kept at `.grok/.planner/implementation.md` per GioBot / user pipeline lock (not moved to plan’s `.grok/.implementor/`). Explicit orchestrator waiver.
+2. **Cloud agent unavailable:** Implemented via local clone + GitHub MCP; CI workflow landed after workflow-scoped auth.
 3. **`azure.yaml` model `version`:** `2025-04-14` starter; README documents catalog verify. Agents extension `>=1.0.0-beta.11`.
-4. **CI mypy cwd:** `src/notes-agent` for flat imports.
-5. **`list_notes`:** Included (optional in plan).
+4. **CI mypy cwd:** `src/notes-agent` for flat imports; pytest runs from repo root via `tests/`.
+5. **`list_notes`:** Included; filters to `.txt` / `.md` note extensions only.
 
 ## Residual risks
 
@@ -64,4 +66,4 @@ Shipped a MAF + `ResponsesHostServer` notes agent with `$HOME` file tools, root 
 
 ## Anti-patterns avoided
 
-No PLACEHOLDER stubs, no BYO agentserver-only stack, no merge to `main`. Standing by for Reviewer fix-loop.
+No PLACEHOLDER stubs, no BYO agentserver-only stack, no merge to `main`. Fix-loop replies await Reviewer OK.
