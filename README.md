@@ -98,9 +98,20 @@ Portal: project overview / **Manage → Project details** shows name, parent acc
 azd ai agent init
 ```
 
-Choose **Use an existing Foundry project** (name already chosen) **or** **Create a new Foundry project** (pick region). Learn does not document `azd ai agent init --project-name`; to **guarantee** a specific name, use option A first, then attach.
+Choose **Use an existing Foundry project** (name already chosen) **or** **Create a new Foundry project** (pick region). Learn does not document `azd ai agent init --project-name`.
 
-If `services.ai-project` has **no** `endpoint:`, `azd provision` creates a Foundry project for you (exact generated name: confirm in provision output / portal).
+**C. Tell azd the project name before provision** — when `services.ai-project` has no `endpoint:` (azd will create the Foundry project), set the name in the azd environment first. At provision time, **azd picks `AZURE_AI_PROJECT_NAME` and creates the Foundry project with that name**:
+
+```bash
+azd env set AZURE_AI_PROJECT_NAME <foundry-project-name>
+# optional companion: azd env set AZURE_AI_ACCOUNT_NAME <foundry-account-name>
+azd env get-values   # confirm; stored under .azure/<env>/.env
+azd provision        # creates the Foundry project using that name
+```
+
+After provision, use the resulting project endpoint from the azd env (e.g. `AZURE_AI_PROJECT_ENDPOINT`) for local `azd ai agent run`.
+
+If you skip A–C and leave `services.ai-project` without `endpoint:`, `azd provision` still creates a Foundry project with a generated name — confirm it in provision output / portal.
 
 ### Model deployment
 
