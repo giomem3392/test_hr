@@ -1,0 +1,43 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
+name: test-hr-notes
+metadata:
+  template: giomem3392-test-hr-notes@0.0.1
+requiredVersions:
+  azd: ">=1.27.1"
+  extensions:
+    azure.ai.agents: ">=1.0.0-beta.11"
+    azure.ai.projects: ">=1.0.0-beta.4"
+services:
+  ai-project:
+    host: azure.ai.project
+    deployments:
+      - name: gpt-4.1-mini
+        model:
+          format: OpenAI
+          name: gpt-4.1-mini
+          # Confirm/replace version from the regional model catalog at `azd` init time.
+          version: "2025-04-14"
+        sku:
+          name: GlobalStandard
+          capacity: 10
+  notes-agent:
+    host: azure.ai.agent
+    project: src/notes-agent
+    language: python
+    codeConfiguration:
+      runtime: python_3_13
+      entryPoint: main.py
+    uses: [ai-project]
+    kind: hosted
+    name: notes-agent
+    protocols:
+      - protocol: responses
+        version: "2.0.0"
+    env:
+      AZURE_AI_MODEL_DEPLOYMENT_NAME: ${AZURE_AI_MODEL_DEPLOYMENT_NAME}
+    container:
+      resources:
+        cpu: "0.25"
+        memory: 0.5Gi
+    sessionConfiguration:
+      idleTimeoutSeconds: 900
