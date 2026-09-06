@@ -185,6 +185,8 @@ Portal: open your **Foundry project** → Agents → **`notes-agent`**. Tear dow
 
 On PRs to `main`, `.github/workflows/ci.yml` runs `ruff` (src + tests), `mypy` on the agent modules, and `pytest -q`.
 
+Separate workflow `.github/workflows/secret-scan.yml` runs **TruffleHog** on every pull request (and pushes to `main`): verified findings only, fail-closed. This repo is an **example** landing for a portable multi-agent coding harness gate — copy the workflow into other repos as-is.
+
 ## Package pins
 
 | Package | Version |
