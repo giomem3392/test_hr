@@ -1,2 +1,12 @@
-# Local metadata — never commit
+# Local / tooling
 .grok/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
