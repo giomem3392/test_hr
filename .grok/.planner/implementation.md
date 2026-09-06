@@ -7,7 +7,7 @@
 
 ## Summary
 
-Shipped a MAF + `ResponsesHostServer` notes agent with `$HOME` file tools, root `azure.yaml` (project + `gpt-4.1-mini` + hosted python agent, protocol `2.0.0`, code deploy), GitHub Actions CI (ruff + mypy + pytest), README with Mermaid session/notes flow, and this implementation note. No live Azure provision/deploy.
+Shipped a MAF + `ResponsesHostServer` notes agent with `$HOME` file tools, root `azure.yaml` (project + `gpt-4.1-mini` + hosted python agent, protocol `2.0.0`, code deploy), GitHub Actions CI (ruff + mypy + pytest), README with Mermaid + step-by-step local/cloud run (including Foundry project naming), and this implementation note. No live Azure provision/deploy.
 
 ## Files delivered
 
@@ -22,7 +22,7 @@ Shipped a MAF + `ResponsesHostServer` notes agent with `$HOME` file tools, root 
 | `azure.yaml` | Foundry project + model + hosted agent |
 | `.github/workflows/ci.yml` | ruff lint/format + mypy + pytest on PRs |
 | `pyproject.toml` / `requirements-dev.txt` | Tooling pins + ruff/mypy config |
-| `README.md` | Usage, contracts, Mermaid |
+| `README.md` | Mermaid + local/cloud run steps + Foundry project naming |
 | `.grok/.planner/implementation.md` | This file (pipeline-locked path) |
 
 ## Pins used
@@ -44,8 +44,8 @@ Shipped a MAF + `ResponsesHostServer` notes agent with `$HOME` file tools, root 
 2. `notes.py` helpers + exact `saved note as {filename}` + unit tests — done  
 3. MAF Agent + `@tool` + `ResponsesHostServer` — done  
 4. Root `azure.yaml` — done  
-5. CI ruff + mypy (+ pytest) — done; workflow on branch, lint job green on earlier head  
-6. README + Mermaid — done  
+5. CI ruff + mypy (+ pytest) — done  
+6. README + Mermaid + local/cloud run + Foundry project naming — done  
 7. Branch + PR + implementation.md — PR #1 open
 
 ## Choices / deviations
@@ -55,6 +55,7 @@ Shipped a MAF + `ResponsesHostServer` notes agent with `$HOME` file tools, root 
 3. **`azure.yaml` model `version`:** `2025-04-14` starter; README documents catalog verify. Agents extension `>=1.0.0-beta.11`.
 4. **CI mypy cwd:** `src/notes-agent` for flat imports; pytest runs from repo root via `tests/`.
 5. **`list_notes`:** Included; filters to `.txt` / `.md` note extensions only.
+6. **README user extra:** Expanded beyond plan’s short azd blurb with concrete step-by-step local run, cloud provision/deploy/invoke, and where the Foundry **project name** comes from (`azd provision` / portal Create project / path segment of `FOUNDRY_PROJECT_ENDPOINT`). Mermaid retained. Commit `a138fc6`.
 
 ## Residual risks
 
